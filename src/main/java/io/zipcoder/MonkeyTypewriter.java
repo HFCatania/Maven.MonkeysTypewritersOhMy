@@ -1,5 +1,8 @@
 package io.zipcoder;
 
+import javax.sound.midi.Soundbank;
+import java.util.stream.Stream;
+
 public class MonkeyTypewriter {
     public static void main(String[] args) {
         String introduction = "It was the best of times,\n" +
@@ -23,6 +26,11 @@ public class MonkeyTypewriter {
         // Do all of the Monkey / Thread building here
         // For each Copier(one safe and one unsafe), create and start 5 monkeys copying the introduction to
         // A Tale Of Two Cities.
+//        SafeCopier safeCopier = new SafeCopier(introduction);
+//        manyMoreMonekeys(safeCopier, 5);
+
+        UnsafeCopier unsafeCopier = new UnsafeCopier(introduction);
+        manyMoreMonekeys(unsafeCopier, 5);
 
 
         // This wait is here because main is still a thread and we want the main method to print the finished copies
@@ -34,5 +42,11 @@ public class MonkeyTypewriter {
         }
 
         // Print out the copied versions here.
+        System.out.println(unsafeCopier.copied);
+//        System.out.println(safeCopier.copied);
+    }
+    public static void manyMoreMonekeys(Copier copier, Integer integer){
+        Stream<Thread> monkey = Stream.generate(() -> new Thread(copier)).limit(integer);
+        monkey.forEach(e -> e.start());
     }
 }
